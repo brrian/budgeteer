@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Context } from '.';
-import { enviornment as env } from './environment';
-import db from './models';
-import { UserInstance } from './models/User';
-import { MutateCreateUser, MutateLogin } from './schema';
+import { Context } from '../..';
+import db from '../../models';
+import { UserInstance } from '../../models/User';
+import { enviornment as env } from '../../environment';
+import { MutateCreateUser, MutateLogin } from './typeDef';
 
 export default {
   Query: {

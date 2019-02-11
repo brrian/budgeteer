@@ -3,16 +3,14 @@ import jwt from 'jsonwebtoken';
 import { enviornment as env } from './environment';
 import db from './models';
 import { UserInstance } from './models/User';
-import resolvers from './resolvers';
-import typeDefs from './schema';
+import schema from './schema';
 
 export interface Context {
   user?: UserInstance;
 }
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   introspection: env.apollo.introspection,
   playground: env.apollo.playground,
   context: async ({ req }: any) => {
