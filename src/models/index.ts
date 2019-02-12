@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import { enviornment as env } from '../environment';
+import { CategoriesFactory } from './Categories';
 import { GroupFactory } from './Group';
 import { UserFactory } from './User';
 
@@ -13,6 +14,7 @@ const sequelize = new Sequelize(
 const db = {
   sequelize,
   Sequelize,
+  Categories: CategoriesFactory(sequelize, Sequelize),
   Group: GroupFactory(sequelize, Sequelize),
   User: UserFactory(sequelize, Sequelize),
 };

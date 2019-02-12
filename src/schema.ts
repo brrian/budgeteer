@@ -1,9 +1,13 @@
 import { gql, makeExecutableSchema } from 'apollo-server';
+import GraphQLJSON from 'graphql-type-json';
 import { merge } from 'lodash';
+import { Categories, categoriesResolver } from './schemas/Categories';
 import { Group } from './schemas/Group';
 import { User, userResolver } from './schemas/User';
 
-const base = gql`
+const baseDefs = gql`
+  scalar JSON
+
   type Query {
     _empty: String
   }
@@ -13,7 +17,11 @@ const base = gql`
   }
 `;
 
+const baseResolvers = {
+  JSON: GraphQLJSON,
+};
+
 export default makeExecutableSchema({
-  typeDefs: [base, Group, User],
-  resolvers: merge(userResolver),
+  typeDefs: [baseDefs, Categories, Group, User],
+  resolvers: merge(baseResolvers, categoriesResolver, userResolver),
 });
