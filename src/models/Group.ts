@@ -3,7 +3,7 @@ import { SequelizeAttributes } from '../../typings/SequelizeAttributes';
 import { UserInstance, UserModel } from './User';
 
 export interface GroupAttributes {
-  id?: number;
+  id?: string;
   name: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -23,6 +23,12 @@ export const GroupFactory = (
   DataTypes: Sequelize.DataTypes
 ): GroupModel => {
   const attributes: SequelizeAttributes<GroupAttributes> = {
+    id: {
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      type: DataTypes.UUID,
+    },
     name: {
       type: DataTypes.STRING,
     },
