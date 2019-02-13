@@ -1,12 +1,11 @@
 import { ApolloServer } from 'apollo-server';
 import jwt from 'jsonwebtoken';
 import { enviornment as env } from './environment';
-import db from './models';
-import { UserInstance } from './models/User';
 import schema from './schema';
 
 export interface Context {
-  user?: UserInstance;
+  userId?: string;
+  groupId?: string;
 }
 
 const server = new ApolloServer({
@@ -14,14 +13,12 @@ const server = new ApolloServer({
   introspection: env.apollo.introspection,
   playground: env.apollo.playground,
   context: async ({ req }: any) => {
-    const token = req.headers.authorization || false;
+    const authHeader: string = req.headers.authorization || false;
 
-    if (token) {
-      const { id }: any = jwt.verify(token.substring(7), env.jwtSecret);
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
 
-      const user = await db.User.findByPk(id);
-
-      return { user };
+      return jwt.verify(token, env.jwtSecret);
     }
   },
 });

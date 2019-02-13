@@ -8,12 +8,12 @@ import { MutateCreateUser, MutateLogin } from './typeDef';
 
 export default {
   Query: {
-    async user(_: any, args: any, { user }: Context) {
-      if (!user) {
+    async user(_: any, args: any, { userId }: Context) {
+      if (!userId) {
         throw new Error('You are not logged in');
       }
 
-      return user;
+      return db.User.findByPk(userId);
     },
   },
 
@@ -31,9 +31,16 @@ export default {
         throw new Error('Invalid email or password');
       }
 
-      return jwt.sign({ id: user.id, email: user.email }, env.jwtSecret, {
-        expiresIn: '5y',
-      });
+      return jwt.sign(
+        {
+          userId: user.id,
+          groupId: user.groupId,
+        },
+        env.jwtSecret,
+        {
+          expiresIn: '5y',
+        }
+      );
     },
 
     async createUser(
