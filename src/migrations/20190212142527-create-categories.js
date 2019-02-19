@@ -10,7 +10,7 @@ module.exports = {
       },
       groupId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Groups',
           key: 'id',
