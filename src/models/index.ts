@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import { enviornment as env } from '../environment';
 import { CategoriesFactory } from './Categories';
 import { GroupFactory } from './Group';
+import { TransactionFactory } from './Transaction';
 import { UserFactory } from './User';
 
 const sequelize = new Sequelize(
@@ -16,6 +17,7 @@ const db = {
   Sequelize,
   Categories: CategoriesFactory(sequelize, Sequelize),
   Group: GroupFactory(sequelize, Sequelize),
+  Transaction: TransactionFactory(sequelize, Sequelize),
   User: UserFactory(sequelize, Sequelize),
 };
 
