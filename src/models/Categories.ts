@@ -32,6 +32,13 @@ export const CategoriesFactory = (
     },
     categories: {
       type: DataTypes.JSON,
+      get(this: CategoriesInstance) {
+        const categories = this.getDataValue('categories');
+
+        return typeof categories === 'string'
+          ? JSON.parse(categories)
+          : categories;
+      },
     },
   };
 

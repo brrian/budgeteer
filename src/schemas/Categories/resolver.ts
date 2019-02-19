@@ -16,7 +16,7 @@ export default {
         throw new Error('Categories do not exist for group');
       }
 
-      return JSON.parse(categories.categories);
+      return categories.categories;
     },
   },
 };
