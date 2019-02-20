@@ -1,6 +1,6 @@
 import { Context } from '../..';
 import db from '../../models';
-import { MutateAddTransaction } from './typeDef';
+import { MutateAddTransaction, MutateToggleTransaction } from './typeDef';
 
 export default {
   Query: {
@@ -43,6 +43,26 @@ export default {
         amount,
         originalAmount: amount,
       });
+    },
+
+    async toggleTransaction(
+      _: any,
+      { id }: MutateToggleTransaction,
+      { groupId }: Context
+    ) {
+      if (!groupId) {
+        throw new Error('You are not logged in');
+      }
+
+      const transaction = await db.Transaction.findByPk(id);
+
+      if (!transaction) {
+        throw new Error('Transaction does not exist by that id');
+      }
+
+      await transaction.update({ disabled: !transaction.disabled });
+
+      return transaction;
     },
   },
 };

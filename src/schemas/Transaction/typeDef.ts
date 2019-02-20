@@ -8,6 +8,10 @@ export interface MutateAddTransaction {
   groupId: string;
 }
 
+export interface MutateToggleTransaction {
+  id: string;
+}
+
 export default gql`
   type Transaction {
     amount: Float
@@ -29,5 +33,7 @@ export default gql`
       date: String!
       description: String!
     ): Transaction
+
+    toggleTransaction(id: String!): Transaction
   }
 `;
