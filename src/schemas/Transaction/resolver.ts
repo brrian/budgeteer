@@ -1,6 +1,11 @@
 import { Context } from '../..';
 import db from '../../models';
-import { MutateAddTransaction, MutateToggleTransaction } from './typeDef';
+import { getTransactionData } from './helpers';
+import {
+  MutateAddTransaction,
+  MutateSyncServiceTransactions,
+  MutateToggleTransaction,
+} from './typeDef';
 
 export default {
   Query: {
@@ -43,6 +48,41 @@ export default {
         amount,
         originalAmount: amount,
       });
+    },
+
+    async syncServiceTransactions(
+      _: any,
+      { service, transactions }: MutateSyncServiceTransactions,
+      { groupId }: Context
+    ) {
+      if (!groupId) {
+        throw new Error('You are not logged in');
+      }
+
+      return await Promise.all(
+        transactions.map(async (serviceMeta: any) => {
+          const { serviceId, data } = getTransactionData(service, serviceMeta);
+
+          const [transaction, created] = await db.Transaction.findOrCreate({
+            where: { groupId, serviceId },
+            defaults: {
+              ...data,
+              amount: data.originalAmount,
+              groupId,
+              serviceId,
+              serviceMeta,
+            },
+          });
+
+          if (!created) {
+            transaction.update(data);
+          }
+
+          // Update monthly totals if necessary
+
+          return transaction;
+        })
+      );
     },
 
     async toggleTransaction(

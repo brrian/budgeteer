@@ -8,6 +8,11 @@ export interface MutateAddTransaction {
   groupId: string;
 }
 
+export interface MutateSyncServiceTransactions {
+  service: string;
+  transactions: any;
+}
+
 export interface MutateToggleTransaction {
   id: string;
 }
@@ -33,6 +38,11 @@ export default gql`
       date: String!
       description: String!
     ): Transaction
+
+    syncServiceTransactions(
+      service: String!
+      transactions: JSON!
+    ): [Transaction]
 
     toggleTransaction(id: String!): Transaction
   }
