@@ -3,6 +3,7 @@ import db from '../../models';
 import { getTransactionData } from './helpers';
 import {
   MutateAddTransaction,
+  MutateDeleteTransaction,
   MutateSyncServiceTransactions,
   MutateToggleTransaction,
 } from './typeDef';
@@ -48,6 +49,20 @@ export default {
         amount,
         originalAmount: amount,
       });
+    },
+
+    async deleteTransaction(
+      _: any,
+      { id }: MutateDeleteTransaction,
+      { groupId }: Context
+    ) {
+      if (!groupId) {
+        throw new Error('You are not logged in');
+      }
+
+      const destroyedRows = await db.Transaction.destroy({ where: { id } });
+
+      return destroyedRows === 1;
     },
 
     async syncServiceTransactions(

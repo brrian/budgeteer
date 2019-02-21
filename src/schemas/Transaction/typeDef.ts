@@ -8,6 +8,10 @@ export interface MutateAddTransaction {
   groupId: string;
 }
 
+export interface MutateDeleteTransaction {
+  id: string;
+}
+
 export interface MutateSyncServiceTransactions {
   service: string;
   transactions: any;
@@ -38,6 +42,8 @@ export default gql`
       date: String!
       description: String!
     ): Transaction
+
+    deleteTransaction(id: String!): Boolean
 
     syncServiceTransactions(
       service: String!
