@@ -6,10 +6,6 @@ import { QueryStashForMonth } from './typeDef';
 export default {
   Query: {
     async stash(_: any, args: any, { groupId }: Context) {
-      if (!groupId) {
-        throw new Error('You are not logged in');
-      }
-
       const stash = await db.Stash.findByPk(groupId);
 
       if (!stash) {
@@ -24,10 +20,6 @@ export default {
       { date }: QueryStashForMonth,
       { groupId }: Context
     ) {
-      if (!groupId) {
-        throw new Error('You are not logged in');
-      }
-
       const startMonth = format(startOfMonth(new Date(date)), 'YYYY-MM');
 
       const stash = await db.Stash.findByPk(groupId);

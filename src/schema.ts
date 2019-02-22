@@ -1,6 +1,8 @@
 import { gql, makeExecutableSchema } from 'apollo-server';
+import { applyMiddleware } from 'graphql-middleware';
 import GraphQLJSON from 'graphql-type-json';
 import { merge } from 'lodash';
+import rules from './rules';
 import { Categories, categoriesResolver } from './schemas/Categories';
 import { Group } from './schemas/Group';
 import { Stash, stashResolver } from './schemas/Stash';
@@ -23,13 +25,16 @@ const baseResolvers = {
   JSON: GraphQLJSON,
 };
 
-export default makeExecutableSchema({
-  typeDefs: [baseDefs, Categories, Group, Stash, Transaction, User],
-  resolvers: merge(
-    baseResolvers,
-    categoriesResolver,
-    stashResolver,
-    transactionResolver,
-    userResolver
-  ),
-});
+export default applyMiddleware(
+  makeExecutableSchema({
+    typeDefs: [baseDefs, Categories, Group, Stash, Transaction, User],
+    resolvers: merge(
+      baseResolvers,
+      categoriesResolver,
+      stashResolver,
+      transactionResolver,
+      userResolver
+    ),
+  }),
+  rules
+);

@@ -9,10 +9,6 @@ import { MutateCreateUser, MutateLogin } from './typeDef';
 export default {
   Query: {
     async user(_: any, args: any, { userId }: Context) {
-      if (!userId) {
-        throw new Error('You are not logged in');
-      }
-
       return db.User.findByPk(userId);
     },
   },

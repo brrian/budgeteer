@@ -11,10 +11,6 @@ import {
 export default {
   Query: {
     async transactions(_: any, args: any, { groupId }: Context) {
-      if (!groupId) {
-        throw new Error('You are not logged in');
-      }
-
       const [categories, transactions] = await Promise.all([
         db.Categories.findOne({ where: { groupId } }),
         db.Transaction.findAll({ where: { groupId } }),
@@ -37,10 +33,6 @@ export default {
       { amount, categoryId, date, description }: MutateAddTransaction,
       { groupId }: Context
     ) {
-      if (!groupId) {
-        throw new Error('You are not logged in');
-      }
-
       return await db.Transaction.create({
         groupId,
         date,
@@ -51,15 +43,7 @@ export default {
       });
     },
 
-    async deleteTransaction(
-      _: any,
-      { id }: MutateDeleteTransaction,
-      { groupId }: Context
-    ) {
-      if (!groupId) {
-        throw new Error('You are not logged in');
-      }
-
+    async deleteTransaction(_: any, { id }: MutateDeleteTransaction) {
       const destroyedRows = await db.Transaction.destroy({ where: { id } });
 
       return destroyedRows === 1;
@@ -70,10 +54,6 @@ export default {
       { service, transactions }: MutateSyncServiceTransactions,
       { groupId }: Context
     ) {
-      if (!groupId) {
-        throw new Error('You are not logged in');
-      }
-
       return await Promise.all(
         transactions.map(async (serviceMeta: any) => {
           const { serviceId, data } = getTransactionData(service, serviceMeta);
@@ -100,15 +80,7 @@ export default {
       );
     },
 
-    async toggleTransaction(
-      _: any,
-      { id }: MutateToggleTransaction,
-      { groupId }: Context
-    ) {
-      if (!groupId) {
-        throw new Error('You are not logged in');
-      }
-
+    async toggleTransaction(_: any, { id }: MutateToggleTransaction) {
       const transaction = await db.Transaction.findByPk(id);
 
       if (!transaction) {

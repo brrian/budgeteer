@@ -4,8 +4,8 @@ import { enviornment as env } from './environment';
 import schema from './schema';
 
 export interface Context {
-  userId?: string;
-  groupId?: string;
+  userId: string;
+  groupId: string;
 }
 
 const server = new ApolloServer({
