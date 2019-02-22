@@ -3,6 +3,7 @@ import GraphQLJSON from 'graphql-type-json';
 import { merge } from 'lodash';
 import { Categories, categoriesResolver } from './schemas/Categories';
 import { Group } from './schemas/Group';
+import { Stash, stashResolver } from './schemas/Stash';
 import { Transaction, transactionResolver } from './schemas/Transaction';
 import { User, userResolver } from './schemas/User';
 
@@ -23,10 +24,11 @@ const baseResolvers = {
 };
 
 export default makeExecutableSchema({
-  typeDefs: [baseDefs, Categories, Group, Transaction, User],
+  typeDefs: [baseDefs, Categories, Group, Stash, Transaction, User],
   resolvers: merge(
     baseResolvers,
     categoriesResolver,
+    stashResolver,
     transactionResolver,
     userResolver
   ),

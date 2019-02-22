@@ -1,10 +1,8 @@
-'use strict';
-
 const bcrypt = require('bcrypt');
 const { v4: uuid } = require('uuid');
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async queryInterface => {
     const groupId = uuid();
 
     return Promise.all([
@@ -65,10 +63,20 @@ module.exports = {
           updatedAt: new Date(),
         },
       ]),
+
+      queryInterface.bulkInsert('Stash', [
+        {
+          groupId,
+          total: 0,
+          months: '{}',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]),
     ]);
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: queryInterface => {
     return Promise.all([
       queryInterface.bulkDelete('Groups', null, {}),
       queryInterface.bulkDelete('Users', null, {}),
