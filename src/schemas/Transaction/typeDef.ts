@@ -6,6 +6,7 @@ export interface MutateAddTransaction {
   date: string;
   description: string;
   groupId: string;
+  note?: string;
 }
 
 export interface MutateDeleteTransaction {
@@ -29,6 +30,7 @@ export default gql`
     description: String
     disabled: Boolean
     id: String
+    note: String
   }
 
   extend type Query {
@@ -41,6 +43,7 @@ export default gql`
       categoryId: Int!
       date: String!
       description: String!
+      note: String
     ): Transaction
 
     deleteTransaction(id: String!): Boolean

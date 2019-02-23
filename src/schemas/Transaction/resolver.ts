@@ -30,15 +30,16 @@ export default {
   Mutation: {
     async addTransaction(
       _: any,
-      { amount, categoryId, date, description }: MutateAddTransaction,
+      { amount, categoryId, date, description, note }: MutateAddTransaction,
       { groupId }: Context
     ) {
       return await db.Transaction.create({
-        groupId,
+        amount,
+        categoryId,
         date,
         description,
-        categoryId,
-        amount,
+        groupId,
+        note,
         originalAmount: amount,
       });
     },

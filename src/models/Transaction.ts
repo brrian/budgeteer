@@ -6,6 +6,7 @@ export interface TransactionAttributes {
   groupId: string;
   date: string;
   description: string;
+  note?: string;
   categoryId: number;
   amount: number;
   originalAmount: number;
@@ -45,6 +46,9 @@ export const TransactionFactory = (
     description: {
       allowNull: false,
       type: DataTypes.STRING,
+    },
+    note: {
+      type: DataTypes.TEXT,
     },
     categoryId: {
       allowNull: false,
