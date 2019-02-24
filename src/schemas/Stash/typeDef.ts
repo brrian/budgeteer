@@ -11,7 +11,7 @@ export default gql`
   }
 
   extend type Query {
-    stash(date: String): Stash
+    stash: Stash
 
     monthlyStash(date: String!): Int
   }

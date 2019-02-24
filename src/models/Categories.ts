@@ -2,8 +2,8 @@ import Sequelize from 'sequelize';
 import { SequelizeAttributes } from '../../typings/SequelizeAttributes';
 
 export interface CategoriesAttributes {
-  id?: number;
-  groupId: number;
+  id?: string;
+  groupId: string;
   categories: string;
   createdAt?: Date;
   updatedAt?: Date;

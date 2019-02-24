@@ -1,5 +1,3 @@
-const defaultPort = 4000;
-
 declare var process: {
   env: {
     [key: string]: string;
@@ -35,5 +33,5 @@ export const enviornment: Environment = {
     username: process.env.DB_USERNAME || 'root',
   },
   jwtSecret: process.env.JWT_SECRET || 'jwtSecret',
-  port: process.env.PORT || defaultPort,
+  port: process.env.PORT || 4000,
 };

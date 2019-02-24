@@ -2,7 +2,7 @@ import Sequelize from 'sequelize';
 import { SequelizeAttributes } from '../../typings/SequelizeAttributes';
 
 export interface TransactionAttributes {
-  id?: number;
+  id?: string;
   groupId: string;
   date: string;
   description: string;

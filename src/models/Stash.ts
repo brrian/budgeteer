@@ -2,7 +2,7 @@ import Sequelize from 'sequelize';
 import { SequelizeAttributes } from '../../typings/SequelizeAttributes';
 
 export interface StashAttributes {
-  groupId: number;
+  groupId: string;
   total: number;
   months: { [key: string]: number };
   createdAt?: Date;
