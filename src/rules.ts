@@ -31,6 +31,7 @@ export default shield({
   Mutation: {
     addTransaction: isAuthenticated,
     deleteTransaction: isAuthenticated,
+    splitTransaction: isAuthenticated,
     syncServiceTransactions: isAuthenticated,
     toggleTransaction: isAuthenticated,
   },

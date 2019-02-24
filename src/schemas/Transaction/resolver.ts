@@ -5,6 +5,7 @@ import { getTransactionData } from './helpers';
 import {
   MutateAddTransaction,
   MutateDeleteTransaction,
+  MutateSplitTransaction,
   MutateSyncServiceTransactions,
   MutateToggleTransaction,
 } from './typeDef';
@@ -37,6 +38,23 @@ export default {
       const destroyedRows = await db.Transaction.destroy({ where: { id } });
 
       return destroyedRows === 1;
+    },
+
+    async splitTransaction(_: any, args: MutateSplitTransaction) {
+      const transaction = await db.Transaction.findByPk(args.transactionId);
+
+      if (!transaction) {
+        throw new Error('Transaction does not exist by that id');
+      } else if (args.amount >= transaction.amount) {
+        throw new Error('Split amount is greater than transaction amount');
+      }
+
+      const [split] = await Promise.all([
+        db.Split.create(args),
+        transaction.update({ amount: transaction.amount - args.amount }),
+      ]);
+
+      return split;
     },
 
     async syncServiceTransactions(

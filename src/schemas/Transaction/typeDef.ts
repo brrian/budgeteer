@@ -13,6 +13,14 @@ export interface MutateDeleteTransaction {
   id: string;
 }
 
+export interface MutateSplitTransaction {
+  amount: number;
+  categoryId: number;
+  description: string;
+  note?: string;
+  transactionId: string;
+}
+
 export interface MutateSyncServiceTransactions {
   service: string;
   transactions: any;
@@ -47,6 +55,14 @@ export default gql`
     ): Transaction
 
     deleteTransaction(id: String!): Boolean
+
+    splitTransaction(
+      amount: Float!
+      categoryId: Int!
+      transactionId: String!
+      description: String!
+      note: String
+    ): Split
 
     syncServiceTransactions(
       service: String!
