@@ -6,7 +6,7 @@ import rules from './rules';
 import { Budget, budgetResolver } from './schemas/Budget';
 import { Categories, categoriesResolver } from './schemas/Categories';
 import { Group } from './schemas/Group';
-import { Split } from './schemas/Split';
+import { Split, splitResolver } from './schemas/Split';
 import { Stash, stashResolver } from './schemas/Stash';
 import { Transaction, transactionResolver } from './schemas/Transaction';
 import { User, userResolver } from './schemas/User';
@@ -43,6 +43,7 @@ export default applyMiddleware(
       baseResolvers,
       budgetResolver,
       categoriesResolver,
+      splitResolver,
       stashResolver,
       transactionResolver,
       userResolver
