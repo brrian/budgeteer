@@ -3,6 +3,7 @@ import { enviornment as env } from '../environment';
 import { BudgetFactory } from './Budget';
 import { CategoriesFactory } from './Categories';
 import { GroupFactory } from './Group';
+import { SplitFactory } from './Split';
 import { StashFactory } from './Stash';
 import { TransactionFactory } from './Transaction';
 import { UserFactory } from './User';
@@ -20,6 +21,7 @@ const db = {
   Budget: BudgetFactory(sequelize, Sequelize),
   Categories: CategoriesFactory(sequelize, Sequelize),
   Group: GroupFactory(sequelize, Sequelize),
+  Split: SplitFactory(sequelize, Sequelize),
   Stash: StashFactory(sequelize, Sequelize),
   Transaction: TransactionFactory(sequelize, Sequelize),
   User: UserFactory(sequelize, Sequelize),

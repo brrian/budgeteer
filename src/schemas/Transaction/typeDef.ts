@@ -25,12 +25,12 @@ export interface MutateToggleTransaction {
 export default gql`
   type Transaction {
     amount: Float
-    category: String
     categoryId: Int
     description: String
     disabled: Boolean
     id: String
     note: String
+    splits: [Split]
   }
 
   extend type Query {

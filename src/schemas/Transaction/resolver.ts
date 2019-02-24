@@ -1,5 +1,6 @@
 import { Context } from '../..';
 import db from '../../models';
+import { TransactionInstance } from '../../models/Transaction';
 import { getTransactionData } from './helpers';
 import {
   MutateAddTransaction,
@@ -11,19 +12,7 @@ import {
 export default {
   Query: {
     async transactions(_: any, args: any, { groupId }: Context) {
-      const [categories, transactions] = await Promise.all([
-        db.Categories.findOne({ where: { groupId } }),
-        db.Transaction.findAll({ where: { groupId } }),
-      ]);
-
-      if (!categories) {
-        throw new Error('Categories do not exist for group');
-      }
-
-      return transactions.map(transaction => ({
-        ...transaction.toJSON(),
-        category: categories.categories[transaction.categoryId],
-      }));
+      return await db.Transaction.findAll({ where: { groupId } });
     },
   },
 
@@ -91,6 +80,12 @@ export default {
       await transaction.update({ disabled: !transaction.disabled });
 
       return transaction;
+    },
+  },
+
+  Transaction: {
+    async splits(transaction: TransactionInstance) {
+      return await transaction.getSplits();
     },
   },
 };

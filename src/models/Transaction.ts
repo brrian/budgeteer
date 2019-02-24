@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import { SequelizeAttributes } from '../../typings/SequelizeAttributes';
+import { SplitInstance, SplitModel } from './Split';
 
 export interface TransactionAttributes {
   id?: string;
@@ -19,7 +20,9 @@ export interface TransactionAttributes {
 
 export interface TransactionInstance
   extends Sequelize.Instance<TransactionAttributes>,
-    TransactionAttributes {}
+    TransactionAttributes {
+  getSplits: Sequelize.HasManyGetAssociationsMixin<SplitInstance>;
+}
 
 export interface TransactionModel
   extends Sequelize.Model<TransactionInstance, TransactionAttributes> {}
@@ -79,6 +82,10 @@ export const TransactionFactory = (
     TransactionInstance,
     TransactionAttributes
   >('Transaction', attributes);
+
+  Transaction.associate = ({ Split }: { Split: SplitModel }) => {
+    Transaction.hasMany(Split);
+  };
 
   return Transaction;
 };
