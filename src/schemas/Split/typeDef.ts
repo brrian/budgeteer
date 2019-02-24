@@ -1,5 +1,8 @@
 import { gql } from 'apollo-server';
 
+export interface MutateDeleteSplit {
+  id: string;
+}
 export interface MutateToggleSplit {
   id: string;
 }
@@ -15,6 +18,8 @@ export default gql`
   }
 
   extend type Mutation {
+    deleteSplit(id: String!): Boolean
+
     toggleSplit(id: String!): Split
   }
 `;
