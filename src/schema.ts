@@ -3,6 +3,7 @@ import { applyMiddleware } from 'graphql-middleware';
 import GraphQLJSON from 'graphql-type-json';
 import { merge } from 'lodash';
 import rules from './rules';
+import { Budget, budgetResolver } from './schemas/Budget';
 import { Categories, categoriesResolver } from './schemas/Categories';
 import { Group } from './schemas/Group';
 import { Stash, stashResolver } from './schemas/Stash';
@@ -27,9 +28,10 @@ const baseResolvers = {
 
 export default applyMiddleware(
   makeExecutableSchema({
-    typeDefs: [baseDefs, Categories, Group, Stash, Transaction, User],
+    typeDefs: [baseDefs, Budget, Categories, Group, Stash, Transaction, User],
     resolvers: merge(
       baseResolvers,
+      budgetResolver,
       categoriesResolver,
       stashResolver,
       transactionResolver,

@@ -20,6 +20,7 @@ const isAuthenticated = rule()(
 
 export default shield({
   Query: {
+    budget: isAuthenticated,
     categories: isAuthenticated,
     monthlyStash: isAuthenticated,
     stash: isAuthenticated,

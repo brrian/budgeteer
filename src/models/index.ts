@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import { enviornment as env } from '../environment';
+import { BudgetFactory } from './Budget';
 import { CategoriesFactory } from './Categories';
 import { GroupFactory } from './Group';
 import { StashFactory } from './Stash';
@@ -16,6 +17,7 @@ const sequelize = new Sequelize(
 const db = {
   sequelize,
   Sequelize,
+  Budget: BudgetFactory(sequelize, Sequelize),
   Categories: CategoriesFactory(sequelize, Sequelize),
   Group: GroupFactory(sequelize, Sequelize),
   Stash: StashFactory(sequelize, Sequelize),

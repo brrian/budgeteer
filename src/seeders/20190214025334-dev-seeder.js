@@ -27,6 +27,21 @@ module.exports = {
         },
       ]),
 
+      queryInterface.bulkInsert('Budgets', [
+        {
+          id: uuid(),
+          groupId,
+          total: 1164,
+          categories: JSON.stringify([
+            { id: 17, limit: 350 },
+            { id: 35, limit: 200 },
+            { id: 14, limit: 90 },
+          ]),
+          createdAt: '2018-02-09 09:04:00',
+          updatedAt: '2018-02-09 09:04:00',
+        },
+      ]),
+
       queryInterface.bulkInsert('Categories', [
         {
           id: uuid(),
