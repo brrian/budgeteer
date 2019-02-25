@@ -29,7 +29,7 @@ export const StashFactory = (
     total: {
       allowNull: false,
       defaultValue: 0,
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
     },
     months: {
       allowNull: false,

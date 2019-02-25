@@ -22,6 +22,7 @@ export interface TransactionInstance
   extends Sequelize.Instance<TransactionAttributes>,
     TransactionAttributes {
   getSplits: Sequelize.HasManyGetAssociationsMixin<SplitInstance>;
+  Splits?: SplitInstance[];
 }
 
 export interface TransactionModel

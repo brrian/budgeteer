@@ -1,7 +1,14 @@
+import { parse, startOfMonth } from 'date-fns';
+import { isEmpty } from 'lodash';
 import { Context } from '../..';
 import db from '../../models';
 import { TransactionInstance } from '../../models/Transaction';
-import { getTransactionData } from './helpers';
+import {
+  getTransactionData,
+  shouldUpdateStash,
+  updateOutdatedStashes,
+  updateStashIfNeeded,
+} from './helpers';
 import {
   MutateAddTransaction,
   MutateDeleteTransaction,
@@ -23,7 +30,7 @@ export default {
       { amount, categoryId, date, description, note }: MutateAddTransaction,
       { groupId }: Context
     ) {
-      return await db.Transaction.create({
+      const transaction = await db.Transaction.create({
         amount,
         categoryId,
         date,
@@ -32,16 +39,40 @@ export default {
         note,
         originalAmount: amount,
       });
+
+      updateStashIfNeeded(transaction);
+
+      return transaction;
     },
 
-    async deleteTransaction(_: any, { id }: MutateDeleteTransaction) {
-      const destroyedRows = await db.Transaction.destroy({ where: { id } });
+    async deleteTransaction(
+      _: any,
+      { id }: MutateDeleteTransaction,
+      { groupId }: Context
+    ) {
+      const transaction = await db.Transaction.findByPk(id, {
+        where: { groupId },
+      });
 
-      return destroyedRows === 1;
+      if (!transaction) {
+        throw new Error('Transaction does not exist by that id');
+      }
+
+      await transaction.destroy();
+
+      updateStashIfNeeded(transaction);
+
+      return true;
     },
 
-    async splitTransaction(_: any, args: MutateSplitTransaction) {
-      const transaction = await db.Transaction.findByPk(args.transactionId);
+    async splitTransaction(
+      _: any,
+      args: MutateSplitTransaction,
+      { groupId }: Context
+    ) {
+      const transaction = await db.Transaction.findByPk(args.transactionId, {
+        where: { groupId },
+      });
 
       if (!transaction) {
         throw new Error('Transaction does not exist by that id');
@@ -62,7 +93,9 @@ export default {
       { service, transactions }: MutateSyncServiceTransactions,
       { groupId }: Context
     ) {
-      return await Promise.all(
+      const outdatedStashes: { [key: string]: boolean } = {};
+
+      const syncedTransactions = await Promise.all(
         transactions.map(async (serviceMeta: any) => {
           const { serviceId, data } = getTransactionData(service, serviceMeta);
 
@@ -81,11 +114,20 @@ export default {
             transaction.update(data);
           }
 
-          // Update monthly totals if necessary
+          const startDate = startOfMonth(parse(transaction.date));
+          if (shouldUpdateStash(startDate)) {
+            outdatedStashes[startDate.toISOString()] = true;
+          }
 
           return transaction;
         })
       );
+
+      if (!isEmpty(outdatedStashes)) {
+        updateOutdatedStashes(Object.keys(outdatedStashes), groupId);
+      }
+
+      return syncedTransactions;
     },
 
     async toggleTransaction(_: any, { id }: MutateToggleTransaction) {
@@ -96,6 +138,8 @@ export default {
       }
 
       await transaction.update({ disabled: !transaction.disabled });
+
+      updateStashIfNeeded(transaction);
 
       return transaction;
     },

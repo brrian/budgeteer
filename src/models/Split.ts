@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import { SequelizeAttributes } from '../../typings/SequelizeAttributes';
+import { TransactionModel, TransactionInstance } from './Transaction';
 
 export interface SplitAttributes {
   id?: string;
@@ -15,7 +16,10 @@ export interface SplitAttributes {
 
 export interface SplitInstance
   extends Sequelize.Instance<SplitAttributes>,
-    SplitAttributes {}
+    SplitAttributes {
+  getTransaction: Sequelize.BelongsToGetAssociationMixin<TransactionInstance>;
+  Transaction: TransactionInstance;
+}
 
 export interface SplitModel
   extends Sequelize.Model<SplitInstance, SplitAttributes> {}
@@ -61,6 +65,10 @@ export const SplitFactory = (
     'Split',
     attributes
   );
+
+  Split.associate = ({ Transaction }: { Transaction: TransactionModel }) => {
+    Split.belongsTo(Transaction);
+  };
 
   return Split;
 };

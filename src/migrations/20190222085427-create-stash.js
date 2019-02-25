@@ -14,7 +14,7 @@ module.exports = {
       },
       total: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         defaultValue: 0,
       },
       months: {
