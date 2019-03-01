@@ -61,13 +61,7 @@ export default {
       { id }: MutateDeleteTransaction,
       { groupId }: Context
     ) {
-      const transaction = await db.Transaction.findByPk(id, {
-        where: { groupId },
-      });
-
-      if (!transaction) {
-        throw new Error('Transaction does not exist by that id');
-      }
+      const transaction = await findTransaction(id, groupId);
 
       await transaction.destroy();
 
@@ -81,13 +75,9 @@ export default {
       args: MutateSplitTransaction,
       { groupId }: Context
     ) {
-      const transaction = await db.Transaction.findByPk(args.transactionId, {
-        where: { groupId },
-      });
+      const transaction = await findTransaction(args.transactionId, groupId);
 
-      if (!transaction) {
-        throw new Error('Transaction does not exist by that id');
-      } else if (args.amount >= transaction.amount) {
+      if (args.amount >= transaction.amount) {
         throw new Error('Split amount is greater than transaction amount');
       }
 
@@ -141,12 +131,12 @@ export default {
       return syncedTransactions;
     },
 
-    async toggleTransaction(_: any, { id }: MutateToggleTransaction) {
-      const transaction = await db.Transaction.findByPk(id);
-
-      if (!transaction) {
-        throw new Error('Transaction does not exist by that id');
-      }
+    async toggleTransaction(
+      _: any,
+      { id }: MutateToggleTransaction,
+      { groupId }: Context
+    ) {
+      const transaction = await findTransaction(id, groupId);
 
       await transaction.update({ disabled: !transaction.disabled });
 
