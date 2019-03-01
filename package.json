@@ -6,7 +6,9 @@
   "scripts": {
     "build:dev": "webpack --config webpack.development.js",
     "build": "webpack --config webpack.production.js",
-    "start": "node -r dotenv/config dist/index"
+    "start": "node -r dotenv/config dist/index",
+    "migrate": "sequelize db:migrate",
+    "migrate:undo": "sequelize db:migrate:undo"
   },
   "dependencies": {
     "apollo-server": "^2.4.0",
