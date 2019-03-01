@@ -34,6 +34,7 @@ export default gql`
   type Transaction {
     amount: Float
     categoryId: Int
+    date: String
     description: String
     disabled: Boolean
     id: String
