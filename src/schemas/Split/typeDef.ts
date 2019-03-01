@@ -3,8 +3,14 @@ import { gql } from 'apollo-server';
 export interface MutateDeleteSplit {
   id: string;
 }
+
 export interface MutateToggleSplit {
   id: string;
+}
+
+export interface MutateUpdateSplit {
+  id: string;
+  updates: string;
 }
 
 export default gql`
@@ -21,5 +27,7 @@ export default gql`
     deleteSplit(id: String!): Boolean
 
     toggleSplit(id: String!): Split
+
+    updateSplit(id: String!, updates: String!): Split
   }
 `;

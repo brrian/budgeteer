@@ -1,7 +1,11 @@
 import { Context } from '../..';
 import db from '../../models';
 import { updateStashIfNeeded } from '../Transaction/helpers';
-import { MutateDeleteSplit, MutateToggleSplit } from './typeDef';
+import {
+  MutateDeleteSplit,
+  MutateToggleSplit,
+  MutateUpdateSplit,
+} from './typeDef';
 
 export default {
   Mutation: {
@@ -33,6 +37,30 @@ export default {
       await split.update({ disabled: !split.disabled });
 
       updateStashIfNeeded(split.Transaction);
+
+      return split;
+    },
+
+    async updateSplit(
+      _: any,
+      { id, updates }: MutateUpdateSplit,
+      { groupId }: Context
+    ) {
+      const split = await db.Split.findByPk(id, { include: [db.Transaction] });
+
+      if (!split || split.Transaction.groupId !== groupId) {
+        throw new Error('Split does not exist by that id');
+      }
+
+      split.set({ ...JSON.parse(updates) });
+
+      const hasToggled = split.changed('disabled');
+
+      await split.save();
+
+      if (hasToggled) {
+        updateStashIfNeeded(split.Transaction);
+      }
 
       return split;
     },
