@@ -96,7 +96,7 @@ export default {
       const outdatedStashes: { [key: string]: boolean } = {};
 
       const syncedTransactions = await Promise.all(
-        transactions.map(async (serviceMeta: any) => {
+        JSON.parse(transactions).map(async (serviceMeta: any) => {
           const { serviceId, data } = getTransactionData(service, serviceMeta);
 
           const [transaction, created] = await db.Transaction.findOrCreate({

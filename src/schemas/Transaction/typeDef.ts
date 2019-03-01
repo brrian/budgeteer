@@ -23,7 +23,7 @@ export interface MutateSplitTransaction {
 
 export interface MutateSyncServiceTransactions {
   service: string;
-  transactions: any;
+  transactions: string;
 }
 
 export interface MutateToggleTransaction {
@@ -67,7 +67,7 @@ export default gql`
 
     syncServiceTransactions(
       service: String!
-      transactions: JSON!
+      transactions: String!
     ): [Transaction]
 
     toggleTransaction(id: String!): Transaction
