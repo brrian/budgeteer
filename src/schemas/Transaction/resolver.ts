@@ -15,7 +15,18 @@ import {
   MutateSplitTransaction,
   MutateSyncServiceTransactions,
   MutateToggleTransaction,
+  MutateUpdateTransaction,
 } from './typeDef';
+
+const findTransaction = async (id: string, groupId: string) => {
+  const transaction = await db.Transaction.findByPk(id, { where: { groupId } });
+
+  if (!transaction) {
+    throw new Error('Transaction does not exist by that id');
+  }
+
+  return transaction;
+};
 
 export default {
   Query: {
@@ -140,6 +151,26 @@ export default {
       await transaction.update({ disabled: !transaction.disabled });
 
       updateStashIfNeeded(transaction);
+
+      return transaction;
+    },
+
+    async updateTransaction(
+      _: any,
+      args: MutateUpdateTransaction,
+      { groupId }: Context
+    ) {
+      const transaction = await findTransaction(args.id, groupId);
+
+      transaction.set(args);
+
+      const isToggled = transaction.changed('disabled');
+
+      await transaction.save();
+
+      if (isToggled) {
+        updateStashIfNeeded(transaction);
+      }
 
       return transaction;
     },

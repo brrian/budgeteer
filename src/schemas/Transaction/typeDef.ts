@@ -30,6 +30,14 @@ export interface MutateToggleTransaction {
   id: string;
 }
 
+export interface MutateUpdateTransaction {
+  categoryId?: number;
+  description?: string;
+  disabled?: boolean;
+  id: string;
+  note?: string;
+}
+
 export default gql`
   type Transaction {
     amount: Float
@@ -71,5 +79,13 @@ export default gql`
     ): [Transaction]
 
     toggleTransaction(id: String!): Transaction
+
+    updateTransaction(
+      categoryId: Int
+      description: String
+      disabled: Boolean
+      id: String!
+      note: String
+    ): Transaction
   }
 `;
