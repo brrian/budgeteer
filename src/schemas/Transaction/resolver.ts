@@ -40,12 +40,13 @@ export default {
       const startDate = format(startOfMonth(parse(date)), 'YYYY-MM-DD');
       const endDate = format(endOfMonth(parse(date)), 'YYYY-MM-DD');
 
-      return await db.Transaction.findAll({
+      return db.Transaction.findAll({
+        include: [db.Split],
+        order: [['date', 'DESC']],
         where: {
           date: { [Op.between]: [startDate, endDate] },
           groupId,
         },
-        order: [['date', 'DESC']],
       });
     },
   },
@@ -183,7 +184,7 @@ export default {
 
   Transaction: {
     async splits(transaction: TransactionInstance) {
-      return await transaction.getSplits();
+      return transaction.Splits;
     },
   },
 };
