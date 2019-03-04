@@ -55,7 +55,8 @@ export const updateOutdatedStashes = async (
   );
 
   stash.total = sum(Object.values(stash.months));
-  stash.save();
+
+  return stash.save();
 };
 
 export const updateStashIfNeeded = (transaction: TransactionInstance) => {

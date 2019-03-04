@@ -1,6 +1,7 @@
 import { ApolloServer } from 'apollo-server';
 import jwt from 'jsonwebtoken';
 import { enviornment as env } from './environment';
+import { scheduleJobs } from './jobs';
 import schema from './schema';
 
 export interface Context {
@@ -26,6 +27,8 @@ const server = new ApolloServer({
 server.listen(env.port).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
+
+scheduleJobs();
 
 if (module.hot) {
   module.hot.accept();
