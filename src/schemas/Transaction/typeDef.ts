@@ -1,5 +1,9 @@
 import { gql } from 'apollo-server';
 
+export interface QueryTransactions {
+  date: string;
+}
+
 export interface MutateAddTransaction {
   amount: number;
   categoryId: number;
@@ -51,7 +55,7 @@ export default gql`
   }
 
   extend type Query {
-    transactions: [Transaction]
+    transactions(date: String!): [Transaction]
   }
 
   extend type Mutation {

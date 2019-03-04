@@ -1,5 +1,6 @@
-import { parse, startOfMonth } from 'date-fns';
+import { endOfMonth, format, parse, startOfMonth } from 'date-fns';
 import { isEmpty } from 'lodash';
+import { Op } from 'sequelize';
 import { Context } from '../..';
 import db from '../../models';
 import { TransactionInstance } from '../../models/Transaction';
@@ -16,6 +17,7 @@ import {
   MutateSyncServiceTransactions,
   MutateToggleTransaction,
   MutateUpdateTransaction,
+  QueryTransactions,
 } from './typeDef';
 
 const findTransaction = async (id: string, groupId: string) => {
@@ -30,8 +32,21 @@ const findTransaction = async (id: string, groupId: string) => {
 
 export default {
   Query: {
-    async transactions(_: any, args: any, { groupId }: Context) {
-      return await db.Transaction.findAll({ where: { groupId } });
+    async transactions(
+      _: any,
+      { date }: QueryTransactions,
+      { groupId }: Context
+    ) {
+      const startDate = format(startOfMonth(parse(date)), 'YYYY-MM-DD');
+      const endDate = format(endOfMonth(parse(date)), 'YYYY-MM-DD');
+
+      return await db.Transaction.findAll({
+        where: {
+          date: { [Op.between]: [startDate, endDate] },
+          groupId,
+        },
+        order: [['date', 'DESC']],
+      });
     },
   },
 
