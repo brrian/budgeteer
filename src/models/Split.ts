@@ -5,7 +5,6 @@ import { TransactionModel, TransactionInstance } from './Transaction';
 export interface SplitAttributes {
   id?: string;
   transactionId: string;
-  description: string;
   note?: string;
   categoryId: number;
   amount: number;
@@ -38,10 +37,6 @@ export const SplitFactory = (
     transactionId: {
       allowNull: false,
       type: DataTypes.UUIDV4,
-    },
-    description: {
-      allowNull: false,
-      type: DataTypes.STRING,
     },
     note: {
       type: DataTypes.TEXT,
