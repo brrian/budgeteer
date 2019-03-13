@@ -41,24 +41,22 @@ export default {
       return split;
     },
 
-    async updateSplit(
-      _: any,
-      { id, updates }: MutateUpdateSplit,
-      { groupId }: Context
-    ) {
-      const split = await db.Split.findByPk(id, { include: [db.Transaction] });
+    async updateSplit(_: any, args: MutateUpdateSplit, { groupId }: Context) {
+      const split = await db.Split.findByPk(args.id, {
+        include: [db.Transaction],
+      });
 
       if (!split || split.Transaction.groupId !== groupId) {
         throw new Error('Split does not exist by that id');
       }
 
-      split.set({ ...JSON.parse(updates) });
+      split.set(args);
 
-      const hasToggled = split.changed('disabled');
+      const isToggled = split.changed('disabled');
 
       await split.save();
 
-      if (hasToggled) {
+      if (isToggled) {
         updateStashIfNeeded(split.Transaction);
       }
 

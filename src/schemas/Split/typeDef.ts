@@ -9,8 +9,10 @@ export interface MutateToggleSplit {
 }
 
 export interface MutateUpdateSplit {
+  categoryId?: number;
+  disabled?: boolean;
   id: string;
-  updates: string;
+  note?: string;
 }
 
 export default gql`
@@ -27,6 +29,11 @@ export default gql`
 
     toggleSplit(id: String!): Split
 
-    updateSplit(id: String!, updates: String!): Split
+    updateSplit(
+      categoryId: Int
+      disabled: Boolean
+      id: String!
+      note: String
+    ): Split
   }
 `;
