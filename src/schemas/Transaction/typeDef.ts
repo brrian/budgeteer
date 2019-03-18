@@ -20,7 +20,6 @@ export interface MutateDeleteTransaction {
 export interface MutateSplitTransaction {
   amount: number;
   categoryId: number;
-  description: string;
   note?: string;
   transactionId: string;
 }
@@ -73,7 +72,6 @@ export default gql`
       amount: Float!
       categoryId: Int!
       transactionId: String!
-      description: String!
       note: String
     ): Split
 
