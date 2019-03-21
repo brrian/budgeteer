@@ -128,7 +128,10 @@ export default {
           });
 
           if (!created) {
-            transaction.update(data);
+            transaction.update({
+              date: data.date,
+              originalAmount: data.originalAmount,
+            });
           }
 
           const startDate = startOfMonth(parse(transaction.date));
