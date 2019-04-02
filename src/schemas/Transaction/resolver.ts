@@ -69,7 +69,7 @@ export default {
 
       updateStashIfNeeded(transaction);
 
-      return transaction;
+      return { ...transaction.toJSON(), Splits: [] };
     },
 
     async deleteTransaction(
