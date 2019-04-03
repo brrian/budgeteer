@@ -54,7 +54,7 @@ export const updateOutdatedStashes = async (
     })
   );
 
-  stash.total = sum(Object.values(stash.months));
+  stash.total = Math.round(sum(Object.values(stash.months)));
 
   return stash.save();
 };
@@ -72,9 +72,16 @@ const sumTransactionsFromRange = async (
   startDate: Date,
   endDate: Date
 ) => {
+  const dateFormat = 'YYYY-MM-DD';
+
   const transactions = await db.Transaction.findAll({
     where: {
-      date: { [Op.between]: [startDate, endDate] },
+      date: {
+        [Op.between]: [
+          format(startDate, dateFormat),
+          format(endDate, dateFormat),
+        ],
+      },
       groupId,
     },
     include: [
