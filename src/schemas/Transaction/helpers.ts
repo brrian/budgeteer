@@ -63,8 +63,10 @@ export const updateStashIfNeeded = (transaction: TransactionInstance) => {
   const date = parse(transaction.date);
 
   if (shouldUpdateStash(date)) {
-    updateOutdatedStashes([date.toISOString()], transaction.groupId);
+    return updateOutdatedStashes([date.toISOString()], transaction.groupId);
   }
+
+  return false;
 };
 
 const sumTransactionsFromRange = async (
