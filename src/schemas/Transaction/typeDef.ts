@@ -42,6 +42,12 @@ export interface MutateUpdateTransaction {
 }
 
 export default gql`
+  type AddedTransaction {
+    stashTotal: Int
+    transaction: Transaction
+    updatedStash: Boolean
+  }
+
   type Transaction {
     amount: Float
     categoryId: Int
@@ -64,7 +70,7 @@ export default gql`
       date: String!
       description: String!
       note: String
-    ): Transaction
+    ): AddedTransaction
 
     deleteTransaction(id: String!): Boolean
 

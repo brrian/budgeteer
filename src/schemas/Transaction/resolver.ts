@@ -67,9 +67,13 @@ export default {
         originalAmount: amount,
       });
 
-      updateStashIfNeeded(transaction);
+      const stash = await updateStashIfNeeded(transaction);
 
-      return { ...transaction.toJSON(), Splits: [] };
+      return {
+        stashTotal: stash !== false ? stash.total : null,
+        transaction: { ...transaction.toJSON(), Splits: [] },
+        updatedStash: stash !== false,
+      };
     },
 
     async deleteTransaction(
